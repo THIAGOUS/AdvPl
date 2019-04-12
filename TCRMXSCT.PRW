@@ -60,24 +60,21 @@ If cUserId $ cUsr
 		If !lContinua //Valida se foi pressionado Ok ou Cancelar 
 			Return
 		Else
-			If (Empty(mv_par01)) .or. (Empty(mv_par02)) .or. (Empty(mv_par03)) .or. (Empty(mv_par04)) .or. (Empty(mv_par06)) .or. (Empty(mv_par08)) .or. (Empty(mv_par10)) .or. (Empty(mv_par12))
-			
-				If Empty(mv_par02)
-					MsgAlert("Favor informar um Vendedor válido!","Atenção!")
-				ElseIf Empty(mv_par03) .or. Empty(mv_par04)
-					MsgAlert("Favor informar uma Data Válida!","Atenção!")
-				ElseIf Empty(mv_par06) 
-					MsgAlert("Favor informar o Segmento!","Atenção!")
-				ElseIf Empty(mv_par08)
-					MsgAlert("Favor informar o Agrupador!","Atenção!")
-				ElseIf Empty(mv_par12)
-					MsgAlert("Favor informar a Unidade!","Atenção!")
-				Else
-					lRet := .T.
-				
-				EndIf
+		
+		/* -- Alterado por: Thiago Vitor em 11/04/2019	
+		   -- Ajuste das validações para permitir a consulta de vendedores em branco*/
+					
+			If Empty(mv_par03) .or. Empty(mv_par04)
+				MsgAlert("Favor informar uma Data Válida!","Atenção!")
+			ElseIf Empty(mv_par06) 
+				MsgAlert("Favor informar o Segmento!","Atenção!")
+			ElseIf Empty(mv_par08)
+				MsgAlert("Favor informar o Agrupador!","Atenção!")
+			ElseIf Empty(mv_par12)
+				MsgAlert("Favor informar a Unidade!","Atenção!")
 			Else
-			
+				lRet := .T.
+		
 				// -- Carrega o parâmetro de filtro	
 				cExprFilTop := " CT_VEND BETWEEN '" + mv_par01 + "' AND '" + mv_par02 + "'"
 				cExprFilTop += " AND CT_DATA BETWEEN '" + DToS(mv_par03) + "' AND '" + DToS(mv_par04) + "'"
@@ -92,6 +89,8 @@ If cUserId $ cUsr
 				cQry += "WHERE SCT.D_E_L_E_T_ = ' ' "
 				cQry += "AND SCT.CT_FILIAL = ' ' "
 				cQry += "AND " + cExprFilTop
+			
+			EndIf
 				
 			// -- Recebimento dos valores para soma do total da meta
 			DbUseArea(.T.,"TOPCONN",TcGenQry(,,cQry),cAliasQry,.T.,.F.)
@@ -114,7 +113,7 @@ If cUserId $ cUsr
 			oBrowse:Activate()
 			
 			EndIf
-		EndIf	
+			
 	EndDo
 	
 Else
@@ -131,9 +130,9 @@ Return
 Static Function MenuDef
 Local aRotina:={}
 
-ADD OPTION aRotina TITLE "Visualizar" 	ACTION "AxVisual" 		OPERATION 6 ACCESS 0
-ADD OPTION aRotina TITLE "Somar Meta" 	ACTION "U_TSCTRUN(2)" 	OPERATION 6 ACCESS 0
-ADD OPTION aRotina TITLE "Excluir" 		ACTION "U_TSCTRUN(1)" 	OPERATION 6 ACCESS 0
+	ADD OPTION aRotina TITLE "Visualizar" 	ACTION "AxVisual" 		OPERATION 6 ACCESS 0
+	ADD OPTION aRotina TITLE "Somar Meta" 	ACTION "U_TSCTRUN(2)" 	OPERATION 6 ACCESS 0
+	ADD OPTION aRotina TITLE "Excluir" 		ACTION "U_TSCTRUN(1)" 	OPERATION 6 ACCESS 0
 
 Return aRotina
 
@@ -170,7 +169,6 @@ Local aRet 			:= {}
 	
 		If MSGYESNO( "Confirma a Exclusão das Metas? (Essa ação não pode ser desfeita!)", "Atenção!" )
 		
-			
 			/*-- Alterado por Thiago Vitor em 22/03/2019 adicionando o Parambox
 			  -- com a informação de motivo que será preenchido no campo CT_XMOTIVO*/ 
 			  
