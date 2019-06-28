@@ -793,7 +793,6 @@ Local aDadosZav		:= {}					//Array para ajuste da ZAV
 									ZAV->(DbGoto( aDadosZav[n,1] ))
 									RECLOCK("ZAV",.F.)
 									ZAV->ZAV_FILIAL := "ALT" + cUserId
-									//ZAV->ZAV_REVISA := cRevInc //cRevOpI
 									MSUNLOCK()
 								
 								Next
@@ -802,7 +801,6 @@ Local aDadosZav		:= {}					//Array para ajuste da ZAV
 								For n := 1 to Len(aDadosZav)
 				
 									// Criação da nova versão da ZAV
-									//ZAV->(DbGoto( aDadosZav[n,1] ))
 									RECLOCK("ZAV",.T.)// Lock no registro para alteração
 									ZAV->ZAV_CODIGO	:= aDadosZav[n,2]
 									ZAV->ZAV_VERSAO	:= aDadosZav[n,3]
